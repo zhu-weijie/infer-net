@@ -37,5 +37,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Download Model Artifact
+        run: |
+          mkdir -p artifacts
+          curl -L -o artifacts/infer-net.keras "https://github.com/zhu-weijie/infer-net/releases/download/v1.0.0-model/infer-net.keras"
+
       - name: Build Docker image
         run: docker build . --tag infer-net:latest
