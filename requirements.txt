@@ -3,5 +3,5 @@ uvicorn[standard]==0.34.3
 tensorflow==2.19.0
 pillow==11.2.1
 requests==2.32.4
-numpy==2.3.0
+numpy==2.0.2
 
