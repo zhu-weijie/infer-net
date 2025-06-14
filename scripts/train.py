@@ -1,29 +1,24 @@
 import tensorflow as tf
 import os
 
-# --- 1. Define Paths and Parameters ---
 MODEL_DIR = "artifacts"
-MODEL_PATH = os.path.join(MODEL_DIR, "model.h5")
+MODEL_PATH = os.path.join(MODEL_DIR, "infer-net.keras")
 IMAGE_SIZE = (28, 28)
 IMAGE_SHAPE = IMAGE_SIZE + (1,)
 BATCH_SIZE = 32
 EPOCHS = 5
 
-# --- 2. Load and Preprocess Data ---
 print("Loading Fashion MNIST dataset...")
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.fashion_mnist.load_data()
 
-# Normalize pixel values to be between 0 and 1
 x_train = x_train.astype("float32") / 255.0
 x_test = x_test.astype("float32") / 255.0
 
-# Reshape data to include channel dimension
 x_train = x_train.reshape((-1,) + IMAGE_SHAPE)
 x_test = x_test.reshape((-1,) + IMAGE_SHAPE)
 print(f"Data loaded and preprocessed. Training shape: {x_train.shape}")
 
 
-# --- 3. Build the CNN Model ---
 print("Building the model...")
 model = tf.keras.models.Sequential([
     tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=IMAGE_SHAPE),
@@ -32,7 +27,7 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.MaxPooling2D((2, 2)),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(10, activation='softmax') # 10 classes for Fashion MNIST
+    tf.keras.layers.Dense(10, activation='softmax')
 ])
 
 model.compile(
@@ -43,7 +38,6 @@ model.compile(
 model.summary()
 
 
-# --- 4. Train the Model ---
 print("Training the model...")
 model.fit(
     x_train,
@@ -54,13 +48,11 @@ model.fit(
 )
 
 
-# --- 5. Evaluate the Model ---
 print("Evaluating the model...")
 loss, accuracy = model.evaluate(x_test, y_test)
 print(f"\nFinal Test Accuracy: {accuracy:.4f}")
 
 
-# --- 6. Save the Model ---
 print("Saving the trained model...")
 os.makedirs(MODEL_DIR, exist_ok=True)
 model.save(MODEL_PATH)
